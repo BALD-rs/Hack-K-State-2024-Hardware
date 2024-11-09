@@ -64,7 +64,7 @@ void vote(String command) {
 
     // Had to add this because LOUIS KEPT SENDING BAD INPUTS >:(
     bool hasYes = false;
-    for (int i = 0; i < 4; i++) { // Loop fixed to 4 iterations
+    for (int i = 0; i < 4; i++) {
         if (command.charAt(i + 1) == 'Y') {
             hasYes = true;
             break;
@@ -237,7 +237,6 @@ void startScreen() {
 
     tft.fillScreen(TFT_BLACK);
 }
-
 
 
 /**
