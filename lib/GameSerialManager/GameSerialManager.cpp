@@ -212,6 +212,11 @@ void startScreen() {
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
     tft.setTextSize(2);
 
+    // turn LEDs on
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(leds[i], HIGH);
+    }
+
     // Display the message in a straightforward way without complex centering calculations
     tft.setCursor(10, 24);
     tft.print("Press any");
@@ -235,6 +240,11 @@ void startScreen() {
         delay(10);  
     }
 
+    // turn LEDs off
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(leds[i], LOW);
+    }
+
     tft.fillScreen(TFT_BLACK);
 }
 
@@ -254,8 +264,12 @@ void endScreen() {
 
     tft.fillScreen(TFT_WHITE); 
     tft.setTextColor(TFT_BLACK, TFT_WHITE);
-
     tft.setTextSize(2);
+
+    // turn LEDs on
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(leds[i], HIGH);
+    }
 
     tft.setCursor(10, 24);
     tft.print("Press any");
@@ -276,6 +290,11 @@ void endScreen() {
             }
         }
         delay(10);  
+    }
+
+    // turn LEDs off
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(leds[i], LOW);
     }
 
     tft.fillScreen(TFT_BLACK); // Clear the screen
