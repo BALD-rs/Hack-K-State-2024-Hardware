@@ -18,7 +18,7 @@
 #define TFT_HEIGHT 128
 
 // For ST7735 ONLY, define the type of display (use one option)
-#define ST7735_REDTAB   // Common option for 160x128 displays; try others if colors appear incorrect
+#define ST7735_BLACKTAB   // Common option for 160x128 displays; try others if colors appear incorrect
 
 // If colors appear inverted (white shows as black), uncomment one of the following lines:
 // #define TFT_INVERSION_ON

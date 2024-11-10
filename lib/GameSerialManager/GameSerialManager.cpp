@@ -93,8 +93,8 @@ void vote(String command) {
             tft.setCursor(xPosition + width / 2 - 10, yPosition + height / 2 - 8);
             tft.print("P" + String(i));
         } else {
-            tft.fillRect(xPosition, yPosition, width, height, TFT_RED);
-            tft.setTextColor(TFT_BLACK, TFT_RED);
+            tft.fillRect(xPosition, yPosition, width, height, TFT_BLUE); // weird issue, blue is red now
+            tft.setTextColor(TFT_BLACK, TFT_BLUE); // weird issue, blue is red now
             tft.setTextSize(2);
             tft.setCursor(xPosition + width / 2 - 10, yPosition + height / 2 - 8);
             tft.print("P" + String(i));
@@ -163,33 +163,42 @@ void policy(String command) {
 
     // Configure LED 4 to blink
     long previousMillis = 0;
-    const long blinkInterval = 750;
     bool ledState = LOW;
 
     bool selectPolicy = false;
     bool buttonPressed[4] = {false, false, false, false};
+    bool policySelected = false;
 
     while (!selectPolicy) {
 
         // Check if it's time to toggle LED 4
-        unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= blinkInterval) {
-            previousMillis = currentMillis;
-            ledState = !ledState;
-            digitalWrite(leds[3], ledState);
+        if (policySelected) {
+            unsigned long currentMillis = millis();
+            if (currentMillis - previousMillis >= 750) {
+                previousMillis = currentMillis;
+                ledState = !ledState;
+                digitalWrite(leds[3], ledState);
+            }
         }
 
         for (int i = 0; i < 4; i++) {
             bool currentState = digitalRead(buttons[i]) == LOW;
 
             if (currentState && !buttonPressed[i]) {
-                Serial.println(i + 1);
+                
 
-                if (i == 3) {
+                // If button 1, 2, or 3 is pressed, unlock 4
+                if (i < 3) {
+                    policySelected = true;
+                    Serial.println(i + 1);
+                }
+
+                if (i == 3 && policySelected) {
                     selectPolicy = true;
+                    Serial.println(i + 1);
                     break;
                 }
-                
+
                 buttonPressed[i] = true;
             } else if (!currentState) {
                 buttonPressed[i] = false;
@@ -199,13 +208,14 @@ void policy(String command) {
         delay(50);
     }
 
-    // turn LEDs off
+    // Turn LEDs off
     for (int i = 0; i < 4; i++) {
         digitalWrite(leds[i], LOW);
     }
 
     tft.fillScreen(TFT_BLACK);
 }
+
 
 
 /**
@@ -230,9 +240,22 @@ void startScreen() {
     tft.setCursor(16, 88);
     tft.print("start...");
 
+    long previousMillis = 0;
+    bool ledState = LOW;
+
     // Wait for a button press to proceed
     bool buttonPressed = false;
     while (!buttonPressed) {
+
+        unsigned long currentMillis = millis();
+        if (currentMillis - previousMillis >= 750) {
+            previousMillis = currentMillis;
+            ledState = !ledState;
+            for (int i = 0; i < 4; i++) {
+                digitalWrite(leds[i], ledState);
+            }
+        }
+
         for (int i = 0; i < 4; i++) {
             if (digitalRead(buttons[i]) == LOW) { 
                 Serial.println(i + 1); 
@@ -283,8 +306,21 @@ void endScreen() {
     tft.setCursor(4, 88);
     tft.print("play again");
 
+    long previousMillis = 0;
+    bool ledState = LOW;
+
     bool buttonPressed = false;
     while (!buttonPressed) {
+
+        unsigned long currentMillis = millis();
+        if (currentMillis - previousMillis >= 750) {
+            previousMillis = currentMillis;
+            ledState = !ledState;
+            for (int i = 0; i < 4; i++) {
+                digitalWrite(leds[i], ledState);
+            }
+        }
+
         for (int i = 0; i < 4; i++) {
             if (digitalRead(buttons[i]) == LOW) { 
                 Serial.println(i + 1); 
