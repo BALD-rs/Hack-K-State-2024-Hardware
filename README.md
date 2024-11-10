@@ -1,7 +1,7 @@
 
 # Hack K-State - The Aparatus
 
-The Aparatus is a hardware interface for *The Fateful Five*, a game developed by BALD-rs for Hack K-State 2024. Its main purpose is to provide an accessible, non-distracting, and easily understandable alternative for a traditional mouse and keyboard setup.
+The Aparatus is a hardware interface for *The Fateful Five*, a game developed by BALD-rs for Hack K-State 2024. Its main purpose is to provide an accessible, non-distracting, and easily understandable alternative for a traditional mouse and keyboard setup. The Repo for the game can be found at https://github.com/BALD-rs/hack-kstate-game-js
 
 ![The Aparatus](assets/the-aparatus.jpg)
 
