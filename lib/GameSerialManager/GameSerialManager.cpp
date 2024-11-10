@@ -129,6 +129,7 @@ void vote(String command) {
     for (int i = 0; i < 4; i++) {
         digitalWrite(leds[i], LOW);
     }
+
     tft.fillScreen(TFT_BLACK);
 }
 
@@ -137,68 +138,71 @@ void vote(String command) {
  * Handles policy selection logic
  */
 void policy(String command) {
-    int8_t revolt1 = (int8_t)command.charAt(1);
-    int8_t cost1 = (int8_t)command.charAt(2);
-    int8_t revolt2 = (int8_t)command.charAt(3);
-    int8_t cost2 = (int8_t)command.charAt(4);
-
-    const int width = 64;
-    const int height = 64;
 
     // Clear the screen
     tft.fillScreen(TFT_BLACK);
     tft.setTextSize(2);
     tft.setTextColor(TFT_WHITE, TFT_BLACK);
 
-    // Display cost1 in top left
-    tft.setCursor(width / 4, height / 4);
-    tft.print("C1");
-    tft.drawLine(width / 4, height / 4 + 16, width / 4 + 20, height / 4 + 16, TFT_WHITE);
-    tft.setCursor(width / 4, height / 4 + 20);
-    tft.print(cost1);
+    tft.setCursor(9, 8);
+    tft.print("Select");
 
-    // Display revolt1 in bottom left
-    tft.setCursor(width / 4, height + height / 4);
-    tft.print("R1");
-    tft.drawLine(width / 4, height + height / 4 + 16, width / 4 + 20, height + height / 4 + 16, TFT_WHITE);
-    tft.setCursor(width / 4, height + height / 4 + 20);
-    tft.print(revolt1);
+    tft.setCursor(9, 40);
+    tft.print("1, 2, 3");
 
-    // Display cost2 in top right
-    tft.setCursor(width + width / 4, height / 4);
-    tft.print("C2");
-    tft.drawLine(width + width / 4, height / 4 + 16, width + width / 4 + 20, height / 4 + 16, TFT_WHITE);
-    tft.setCursor(width + width / 4, height / 4 + 20);
-    tft.print(cost2);
+    tft.setCursor(9, 72);
+    tft.print("Confirm");
 
-    // Display revolt2 in bottom right
-    tft.setCursor(width + width / 4, height + height / 4);
-    tft.print("R2");
-    tft.drawLine(width + width / 4, height + height / 4 + 16, width + width / 4 + 20, height + height / 4 + 16, TFT_WHITE);
-    tft.setCursor(width + width / 4, height + height / 4 + 20);
-    tft.print(revolt2);
+    tft.setCursor(9, 104);
+    tft.print("4");
 
-    // Set two policy LEDs high
+    // Set three policy LEDs high
     digitalWrite(leds[0], HIGH);
     digitalWrite(leds[1], HIGH);
+    digitalWrite(leds[2], HIGH);
 
-    // Continuously check for button presses on the two policy buttons
-    bool buttonPressed = false;
-    while (!buttonPressed) {
-        for (int i = 0; i < 2; i++) {
-            if (digitalRead(buttons[i]) == LOW) { 
-                Serial.println(i + 1); 
-                buttonPressed = true;
-                break;
+    // Configure LED 4 to blink
+    long previousMillis = 0;
+    const long blinkInterval = 750;
+    bool ledState = LOW;
+
+    bool selectPolicy = false;
+    bool buttonPressed[4] = {false, false, false, false};
+
+    while (!selectPolicy) {
+
+        // Check if it's time to toggle LED 4
+        unsigned long currentMillis = millis();
+        if (currentMillis - previousMillis >= blinkInterval) {
+            previousMillis = currentMillis;
+            ledState = !ledState;
+            digitalWrite(leds[3], ledState);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            bool currentState = digitalRead(buttons[i]) == LOW;
+
+            if (currentState && !buttonPressed[i]) {
+                Serial.println(i + 1);
+
+                if (i == 3) {
+                    selectPolicy = true;
+                    break;
+                }
+                
+                buttonPressed[i] = true;
+            } else if (!currentState) {
+                buttonPressed[i] = false;
             }
         }
 
-        delay(10);  
+        delay(50);
     }
 
     // turn LEDs off
-    digitalWrite(leds[0], LOW);
-    digitalWrite(leds[1], LOW);
+    for (int i = 0; i < 4; i++) {
+        digitalWrite(leds[i], LOW);
+    }
 
     tft.fillScreen(TFT_BLACK);
 }
@@ -217,7 +221,6 @@ void startScreen() {
         digitalWrite(leds[i], HIGH);
     }
 
-    // Display the message in a straightforward way without complex centering calculations
     tft.setCursor(10, 24);
     tft.print("Press any");
 
