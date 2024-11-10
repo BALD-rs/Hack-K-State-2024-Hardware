@@ -3,7 +3,7 @@
 
 The apparatus is a hardware interface for *The Fateful Five*, a game developed by BALD-rs for Hack K-State 2024. Its main purpose is to provide an accessible, non-distracting, and easily understandable alternative for a traditional mouse and keyboard setup. The Repo for the game can be found at (https://github.com/BALD-rs/the-fateful-five.git)
 
-![The apparatus](assets/the-apparatus.jpg)
+![The apparatus](assets/the-aparatus.jpg)
 
 The apparatus consists of four easy-to-read buttons, four indicator LEDs, and a TFT display. The indicator LEDs show which buttons are available for use at any given time to help aid the player, and the display presents information relevant to the current state of the game.
 
